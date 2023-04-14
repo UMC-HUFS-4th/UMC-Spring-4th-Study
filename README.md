@@ -1,4 +1,4 @@
-![header](https://capsule-render.vercel.app/api?type=waving&color=auto&height=300&section=header&text=UMC%204TH%20HUFS%20SPRING%20레포지토리🌱&fontSize=40)
+![header](https://capsule-render.vercel.app/api?type=waving&color=auto&height=300&section=header&text=UMC%204TH%20HUFS%20SPRING%20REPOSITORY🌱&fontSize=40)
 
 
 <div align=center>
