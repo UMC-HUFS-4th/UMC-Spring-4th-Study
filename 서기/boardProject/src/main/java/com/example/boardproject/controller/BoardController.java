@@ -1,5 +1,6 @@
 package com.example.boardproject.controller;
 
+import com.example.boardproject.entity.Board;
 import com.example.boardproject.service.BoardService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,14 +20,43 @@ public class BoardController {
 
     //Path Variable 1개와 Query Parameter 2개
     // 컨트로럴는 응답을 받고 요청을 처리
-    @PostMapping("create/{id}")
+    @PostMapping("/create")
     public ResponseEntity<String> createBoard(
-            @PathVariable long id,
             @RequestParam String title,
             @RequestParam String content)
         {
-            String storedTitle = this.boardService.create(id, title, content); // 저장된 title을 반환
+            String storedTitle = this.boardService.create(title, content); // 저장된 title을 반환
             return ResponseEntity.ok().body(storedTitle);
+    }
+
+    // Board는 여러개 -> List<Board>
+    // ResponseEntity -> 응답에 대한 Header, Body, HttpStatus
+    @GetMapping("/get")
+    public ResponseEntity<List<Board>> getBoard(){
+        List<Board> boardList = this.boardService.get();
+        return ResponseEntity.ok().body(boardList);
+    }
+
+    // pathVariable -> boardId
+    // requestParam -> 수정될 제목, 수정될 내용
+    // 수정된 게시글의 제목을 return
+    @PutMapping("/update/{boardId}")
+    public ResponseEntity<String> updateBoard(
+            @PathVariable(name = "boardId") Long id,
+            @RequestParam String title,
+            @RequestParam String content
+    ){
+        String updatedTitlte = this.boardService.update(id, title, content);
+        return ResponseEntity.ok().body(updatedTitlte);
+    }
+
+    // 삭제된 board를 return
+    @DeleteMapping("/delete/{boardId}")
+    public ResponseEntity<Board> deleteBoard(
+            @PathVariable(name = "boardId") Long id
+    ){
+        Board deleteBoard = this.boardService.delete(id); // 삭제하고 삭제된 게시글
+        return ResponseEntity.ok().body(deleteBoard); // 리턴
     }
 
 //    @GetMapping("/get")
