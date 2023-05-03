@@ -22,15 +22,42 @@ public class BoardController {
 
     //PathVariable 1개
     //QueryString 2개
-    @PostMapping("/create/{boardId}")
+    @PostMapping("/create")
     public ResponseEntity<String> createBoard(
-            @PathVariable Long boardId,
             @RequestParam String title,
             @RequestParam String content
     ) {
-        String storedTitle = this.boardService.create(boardId, title, content); //리턴
-
+        String storedTitle = this.boardService.create(title, content); //리턴
         return ResponseEntity.ok().body(storedTitle);
+    }
+
+    //Board -> 여러개 List<Board>
+    //ResponseEntity -> Header, Body HttpStatus
+    @GetMapping("/get")
+    public ResponseEntity<List<Board>> getBoard() {
+        List<Board> boardList = this.boardService.get();
+        return ResponseEntity.ok().body(boardList);
+    }
+
+    //pathVariable -> boardId
+    // requestParam -> 수정될 제목, 수정될 내용
+    //수정된 게시글의 제목
+    @PutMapping("/update/{boardId}")
+    public ResponseEntity<String> updateBoard(
+        @PathVariable(name = "boardId") Long Id,
+        @RequestParam String title,
+        @RequestParam String content
+    ) {
+        String updateTitle = this.boardService.update(Id, title, content);
+        return ResponseEntity.ok().body(updateTitle);
+    }
+    //삭제된 board
+    @DeleteMapping("/delete/{boardId}")
+    public ResponseEntity<Board> deleteBoard(
+            @PathVariable(name = "boardId") Long Id
+    ) {
+        Board deleteBoard = this.boardService.delete(Id);
+        return ResponseEntity.ok().body(deleteBoard);
     }
 }
 
