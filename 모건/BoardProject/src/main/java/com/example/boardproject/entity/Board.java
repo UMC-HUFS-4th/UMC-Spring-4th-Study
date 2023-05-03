@@ -1,9 +1,7 @@
 package com.example.boardproject.entity;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,22 +10,15 @@ import javax.persistence.Id;
 
 @Getter
 @Setter
+@Builder
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 public class Board {
 
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long Id;
-
     private String title;
-
     private String content;
 
-    public Board(Long Id, String title, String content) {
-            this.Id = Id;
-            this.title = title;
-            this.content = content;
-
-    }
 }
