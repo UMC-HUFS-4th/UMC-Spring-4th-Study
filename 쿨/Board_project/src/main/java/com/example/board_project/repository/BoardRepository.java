@@ -1,11 +1,12 @@
-package org.example.repository;
+package com.example.board_project.repository;
 
-import org.example.entity.Board;
+import com.example.board_project.entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
+
 
 
 }
