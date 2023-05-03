@@ -1,71 +1,58 @@
 package org.example.controller;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.example.Board;
+import org.example.entity.Board;
+import org.example.service.BoardService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
+
+@AllArgsConstructor
 @Slf4j
-@RequiredArgsConstructor
+@RequestMapping("/board")
 @RestController
+@Getter
 public class BoardController {
 
-    private List<Board> boardList = new ArrayList<>(); // 저장소 역할 하는 리스트
+    private final BoardService boardService;
 
-    @PostMapping("/board/create/{boardId}")
-    public String createBoard(
+    @PostMapping("/create/{boardId}")
+    public ResponseEntity<String> createBoard(
             @PathVariable(name = "boardId") Long id,
             @RequestParam(name = "title") String title,
             @RequestParam(name = "content") String content
     ) {
-        Board board = new Board(id, title, content); // 게시판 생성
-        boardList.add(board); // 게시판 추가
-        log.info(title + " " + content + "을 추가합니다."); // 로그 찍기
-        return title + " " + content + "을 추가합니다."; // 출력
+        String storedTitle = this.boardService.create(id, title, content); // 저장된 타이틀
+        return ResponseEntity.ok().body(storedTitle);
     }
 
-    @GetMapping("/board/get")
-    public List<Board> getBoard() {
-        log.info("게시글 개수는 " + boardList.size() + " 입니다."); // 로그
-        return this.boardList; // get
+    @GetMapping("/get")
+    public ResponseEntity<List<Board>> getBoard(
+
+    ) {
+        List<Board> boardList = this.boardService.get();
+        return ResponseEntity.ok().body(boardList);
     }
 
-    @PutMapping("/board/update/{boardId}")
-    public String updateBoard(
-            @PathVariable(name = "boardId") Long boardId,
+    @DeleteMapping("/delete/{boardId}")
+    public ResponseEntity<Void> deleteBoard(
+            @PathVariable(name = "boardId") Long id
+    ) {
+        this.boardService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/update/{boardId}")
+    public ResponseEntity<Board> updateBoard(
+            @PathVariable(name = "boardId") Long id,
             @RequestParam(name = "title") String title,
             @RequestParam(name = "content") String content
     ) {
-        for (int i = 0; i < this.boardList.size(); i++) {
-            if (this.boardList.get(i).getId() == boardId) {
-                this.boardList.get(i).setTitle(title);
-                this.boardList.get(i).setContent(content); // 수정 완료
-
-                log.info(boardId + " 번의 게시글 수정 완료하였습니다.");
-                return boardId + " 번의 게시글 수정 완료하였습니다.";
-            }
-        }
-        log.error(boardId + " 번의 게시글 존재하지 않습니다.");
-        return boardId + " 번의 게시글 존재하지 않습니다.";
-    }
-
-    @DeleteMapping("/board/delete/{boardId}")
-    public String deleteBoard(
-            @PathVariable(name = "boardId") Long boardId
-    ) {
-        for (Board board : this.boardList) {
-
-            if (board.getId() == boardId) {
-                this.boardList.remove(board);
-
-                log.info(boardId + " 번의 게시글 삭제 완료하였습니다.");
-                return boardId + " 번의 게시글 삭제하였습니다.";
-            }
-        }
-        log.error(boardId + " 번의 게시글 존재하지 않습니다.");
-        return boardId + " 번의 게시글 존재하지 않습니다.";
+        Board updatedBoard = this.boardService.update(id,title,content);
+        return ResponseEntity.ok().body(updatedBoard);
     }
 }
