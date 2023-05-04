@@ -19,13 +19,12 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @PostMapping("/create/{boardId}")
+    @PostMapping("/create")
     public ResponseEntity<String> createBoard(
-            @PathVariable(name = "boardId") Long id,
             @RequestParam(name = "title") String title,
             @RequestParam(name = "content") String content
     ) {
-        String storedTitle = this.boardService.create(id, title, content); // 저장된 타이틀
+        String storedTitle = this.boardService.create(title, content); // 저장된 타이틀
         return ResponseEntity.ok().body(storedTitle);
     }
 
