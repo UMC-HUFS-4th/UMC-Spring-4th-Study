@@ -1,11 +1,14 @@
 package com.example.boardproject.controller;
 
+import com.example.boardproject.Entity.Board;
 import com.example.boardproject.service.BoardService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequestMapping("/board")
@@ -20,17 +23,36 @@ public class BoardController {
     // Pathvatiable 1개
     // QueryString 2개
 
-    @PostMapping("/create/{boardId}")
+    @PostMapping("/create")
     public ResponseEntity<String> createBoard(
-            @PathVariable int boardId,
             @RequestParam String title,
             @RequestParam String content
     ) {
-        String storedtitle = this.boardService.create(boardId, title, content);
-
+        String storedtitle = this.boardService.create(title, content);
         return ResponseEntity.ok().body(storedtitle);
+    }
+    @GetMapping("/get")
+    public ResponseEntity<List<Board>> getBoard() {
+        List<Board> boardList = this.boardService.get();
+        return ResponseEntity.ok().body(boardList);
+    }
 
-
+    @PutMapping("/update/{boardId}")
+    public ResponseEntity<String> updateBoard(
+            @PathVariable(name = "boardId") Long id,
+            @RequestParam String title,
+            @RequestParam String content
+    ){
+        String updateTitle = this.boardService.update(id,title,content);
+        return ResponseEntity.ok().body(updateTitle);
+    }
+    // 삭제된 board
+    @DeleteMapping("/delete/{boardId}")
+    public ResponseEntity<Board> deleteBoard(
+            @PathVariable(name = "boardId") Long id
+    ) {
+        Board deleteBoard = this.boardService.delete(id);
+        return ResponseEntity.ok().body(deleteBoard);
     }
 
     /*@GetMapping("/get")
