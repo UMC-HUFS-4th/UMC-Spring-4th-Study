@@ -19,10 +19,9 @@ public class BoardService {
 
     private final BoardRepository boardRepository;// BoardRepository 의존성 추가
 
-    public String create(Long id, String title, String content) {
+    public String create (String title, String content) {
 
-        Board board = new Board(id, title, content); // 새로운 객체 생성
-        boardRepository.save(board); // 저장 완료
+        boardRepository.save(Board.); // 저장 완료
 
         return title; // 저장된 제목 리턴
     }
